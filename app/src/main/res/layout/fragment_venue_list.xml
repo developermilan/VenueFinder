@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.amro.venuefinder.data.Venue" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/venue_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{data.name}"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="title" />
+
+        <TextView
+            android:id="@+id/venue_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{data.location.city}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/venue_title"
+            tools:text="City" />
+
+        <TextView
+            android:id="@+id/venue_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:text="@{data.location.state}"
+            app:layout_constraintLeft_toRightOf="@id/venue_city"
+            app:layout_constraintTop_toBottomOf="@id/venue_title"
+            tools:text="State" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
