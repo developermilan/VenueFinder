@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.amro.venuefinder.MainActivity
 import com.amro.venuefinder.R
@@ -21,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class VenueDetailFragment : Fragment() {
 
-    private val vid_key = "VID"
+    private val vidKey = "VID"
     private lateinit var binding: VenueDetailFragmentBinding
     private lateinit var viewModel: VenueDetailViewModel
     private lateinit var vid: String
@@ -38,13 +37,13 @@ class VenueDetailFragment : Fragment() {
             )
         )
         viewModel = ViewModelProvider(this, factory).get(VenueDetailViewModel::class.java)
-        vid = arguments?.getString(vid_key, "").toString()
+        vid = arguments?.getString(vidKey, "").toString()
         viewModel.fetchVenueDetails(vid)
     }
 
     private fun updateUiOnDataChange() {
         with(viewModel) {
-            venue.observe(viewLifecycleOwner, Observer {
+            venue.observe(viewLifecycleOwner, {
                 binding.data = it
                 binding.addressTv.text = it.location?.address?.joinToString(separator = " ")
                 if (it.photos?.groups != null && it.photos.groups.isNotEmpty()
@@ -56,7 +55,7 @@ class VenueDetailFragment : Fragment() {
                 }
             })
 
-            isError.observe(viewLifecycleOwner, Observer {
+            isError.observe(viewLifecycleOwner, {
                 val message = it.message ?: "Unknown error"
                 Snackbar.make(binding.descriptionTv, message, Snackbar.LENGTH_LONG).show()
             })

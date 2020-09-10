@@ -3,7 +3,6 @@ package com.amro.venuefinder.ui.list
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amro.venuefinder.data.Event
 import com.amro.venuefinder.data.Venue
 import com.amro.venuefinder.repository.VenueRepository
 import kotlinx.coroutines.CoroutineExceptionHandler

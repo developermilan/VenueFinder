@@ -47,3 +47,11 @@ f
 6app/src/main/java/com/amro/venuefinder/data/Contact.kt,d/3/d36be8fc0c21927353fc53a425bfd59930c0b1a5
 d
 4app/src/main/java/com/amro/venuefinder/data/Event.kt,f/3/f3383391de4a460da3ce4ab4c80d5f25703cd8f1
+k
+;app/src/test/java/com/amro/venuefinder/TestCoroutineRule.kt,c/c/ccd2f60457f0fa1797c8351fdcf3c7851e211cdb
+x
+Happ/src/test/java/com/amro/venuefinder/repository/VenueRepositoryTest.kt,0/f/0fc2ab1ac3e0539cc8e7cbd3ac37e56f10fa2844
+x
+Happ/src/test/java/com/amro/venuefinder/ui/list/VenueListViewModelTest.kt,2/f/2fa20db5e8ad49dcd1ec02c3e2e222612efc006f
+|
+Lapp/src/test/java/com/amro/venuefinder/ui/detail/VenueDetailViewModelTest.kt,4/4/44f7299f07357010327eda71843eaf8b063bf146

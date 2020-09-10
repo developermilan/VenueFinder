@@ -9,7 +9,7 @@ import com.amro.venuefinder.R
 import com.amro.venuefinder.data.Photos
 import com.bumptech.glide.Glide
 
-class SlidingImageAdapter(private val photos: Photos) :
+class SlidingImageAdapter(photos: Photos) :
     RecyclerView.Adapter<SlidingImageAdapter.ViewHolder>() {
 
     private val items = photos.groups?.get(0)?.items
@@ -35,7 +35,7 @@ class SlidingImageAdapter(private val photos: Photos) :
         return items?.size!!
     }
 
-    class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView = view.findViewById(R.id.image_item) as ImageView
     }
 }

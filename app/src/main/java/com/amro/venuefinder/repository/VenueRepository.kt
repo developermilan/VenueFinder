@@ -1,6 +1,5 @@
 package com.amro.venuefinder.repository
 
-import android.app.Application
 import com.amro.venuefinder.data.Venue
 import com.amro.venuefinder.data.VenueDetailResult
 import com.amro.venuefinder.data.VenueSearchResult
