@@ -1,5 +1,5 @@
 # VenueFinder
-A demo app for finding venues and its details
+A demo app for finding venues and their details
 
 In this project, I have used following:
 
