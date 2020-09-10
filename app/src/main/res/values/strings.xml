@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">VenueFinder</string>
+    <string name="internet_error">Internet is not working. \nSo loading previous data if available</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="venue_list_title">Venue List</string>
+    <string name="fragment_tag">Details</string>
+    <string name="any">any</string>
+    <string name="search_hint">Search venues…</string>
 </resources>

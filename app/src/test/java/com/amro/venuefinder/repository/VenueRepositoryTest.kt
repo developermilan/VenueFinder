@@ -1,9 +1,8 @@
 package com.amro.venuefinder.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.core.util.lruCache
 import com.amro.venuefinder.TestCoroutineRule
-import org.junit.Assert.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -13,6 +12,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
+@ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
 class VenueRepositoryTest {
 
@@ -38,44 +38,44 @@ class VenueRepositoryTest {
     @Test
     fun `remote search call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(true, remoteDataSource, localDataSource)
-            repository.search("Pune")
-            Mockito.verify(remoteDataSource).search("Pune")
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.search(search_val, true)
+            Mockito.verify(remoteDataSource).search(search_val)
         }
     }
 
     @Test
     fun `local search call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(false, remoteDataSource, localDataSource)
-            repository.search("Pune")
-            Mockito.verify(localDataSource).search("Pune")
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.search(search_val, false)
+            Mockito.verify(localDataSource).search(search_val)
         }
     }
 
     @Test
     fun `remote details call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(true, remoteDataSource, localDataSource)
-            repository.details("abscc")
-            Mockito.verify(remoteDataSource).details("abscc")
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.details(details_id, true)
+            Mockito.verify(remoteDataSource).details(details_id)
         }
     }
 
     @Test
     fun `local details call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(false, remoteDataSource, localDataSource)
-            repository.details("abscc")
-            Mockito.verify(localDataSource).details("abscc")
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.details(details_id, false)
+            Mockito.verify(localDataSource).details(details_id)
         }
     }
 
     @Test
     fun `deleteAll call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(true, remoteDataSource, localDataSource)
-            repository.deleteAll()
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.deleteAll(true)
             Mockito.verify(localDataSource).deleteAll()
         }
     }
@@ -83,8 +83,8 @@ class VenueRepositoryTest {
     @Test
     fun `deleteAll call failure`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(false, remoteDataSource, localDataSource)
-            repository.deleteAll()
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.deleteAll(false)
             Mockito.verifyNoInteractions(localDataSource)
         }
     }
@@ -92,8 +92,8 @@ class VenueRepositoryTest {
     @Test
     fun `insert venues call`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(true, remoteDataSource, localDataSource)
-            repository.insertVenues(emptyList())
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.insertVenues(emptyList(), true)
             Mockito.verify(localDataSource).insert(Mockito.anyList())
         }
     }
@@ -101,9 +101,14 @@ class VenueRepositoryTest {
     @Test
     fun `insert venues call failure`() {
         testCoroutineRule.runBlockingTest {
-            repository = VenueRepository(false, remoteDataSource, localDataSource)
-            repository.insertVenues(emptyList())
+            repository = VenueRepository(remoteDataSource, localDataSource)
+            repository.insertVenues(emptyList(), false)
             Mockito.verifyNoInteractions(localDataSource)
         }
+    }
+
+    companion object {
+        const val search_val = "pune"
+        const val details_id = "abscc"
     }
 }

@@ -5,19 +5,13 @@ import com.amro.venuefinder.data.VenueDetailResult
 import com.amro.venuefinder.data.VenueSearchResult
 
 class VenueRepository(
-    private val isInternetConnected: Boolean,
     private val remoteDataSource: VenueRemoteDataSource,
     private val localDataSource: VenueLocalDataSource
-) :
-    VenueDataSource {
+) {
 
-    override suspend fun search(
+    suspend fun search(
         near: String,
-        limit: Int,
-        radius: Int,
-        clientId: String,
-        clientSecret: String,
-        version: Int
+        isInternetConnected: Boolean
     ): VenueSearchResult? {
         return if (isInternetConnected) {
             remoteDataSource.search(near)
@@ -26,11 +20,9 @@ class VenueRepository(
         }
     }
 
-    override suspend fun details(
+    suspend fun details(
         id: String,
-        clientId: String,
-        clientSecret: String,
-        version: Int
+        isInternetConnected: Boolean
     ): VenueDetailResult? {
         return if (isInternetConnected) {
             remoteDataSource.details(id)
@@ -39,13 +31,13 @@ class VenueRepository(
         }
     }
 
-    suspend fun insertVenues(venues: List<Venue>) {
+    suspend fun insertVenues(venues: List<Venue>, isInternetConnected: Boolean) {
         if (isInternetConnected) {
             localDataSource.insert(venues)
         }
     }
 
-    suspend fun deleteAll() {
+    suspend fun deleteAll(isInternetConnected: Boolean) {
         if (isInternetConnected) {
             localDataSource.deleteAll()
         }

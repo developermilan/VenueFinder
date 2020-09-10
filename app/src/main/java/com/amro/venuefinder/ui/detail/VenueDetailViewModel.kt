@@ -13,7 +13,7 @@ class VenueDetailViewModel(private val repository: VenueRepository) : ViewModel(
     val isError = MutableLiveData<Throwable>()
     val venue = MutableLiveData<Venue>()
 
-    fun fetchVenueDetails(vid: String) {
+    fun fetchVenueDetails(vid: String, isInternetConnected: Boolean) {
 
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             isError.postValue(throwable)
@@ -21,7 +21,7 @@ class VenueDetailViewModel(private val repository: VenueRepository) : ViewModel(
 
         viewModelScope.launch(exceptionHandler) {
 
-            val result = repository.details(vid)
+            val result = repository.details(vid, isInternetConnected = isInternetConnected)
             venue.postValue(result?.response?.venue)
         }
     }

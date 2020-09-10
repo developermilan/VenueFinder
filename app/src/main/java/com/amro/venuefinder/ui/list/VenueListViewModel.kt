@@ -17,20 +17,20 @@ class VenueListViewModel(private val repository: VenueRepository) : ViewModel() 
     val clickedItemPosition = MutableLiveData<Int>()
     private var lastQuery = ""
 
-    fun initialise() {
-        search(lastQuery)
+    fun initialise(isInternetConnected: Boolean) {
+        search(lastQuery, isInternetConnected)
     }
 
-    fun search(query: String?) {
+    fun search(query: String?, isInternetConnected: Boolean) {
         venueList = ArrayList()
         lastQuery = query ?: ""
 
         if (lastQuery != "") {
-            loadVenues()
+            loadVenues(isInternetConnected)
         }
     }
 
-    private fun loadVenues() {
+    private fun loadVenues(isInternetConnected: Boolean) {
 
         val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
             isLoading.postValue(false)
@@ -40,11 +40,14 @@ class VenueListViewModel(private val repository: VenueRepository) : ViewModel() 
         viewModelScope.launch(exceptionHandler) {
             isLoading.postValue(true)
 
-            val result = repository.search(lastQuery)
+            val result = repository.search(lastQuery, isInternetConnected = isInternetConnected)
             venues.postValue(result?.searchResponse?.venueList)
 
-            repository.deleteAll()
-            repository.insertVenues(result?.searchResponse?.venueList ?: emptyList())
+            repository.deleteAll(isInternetConnected)
+            repository.insertVenues(
+                result?.searchResponse?.venueList ?: emptyList(),
+                isInternetConnected
+            )
 
             isLoading.postValue(false)
         }

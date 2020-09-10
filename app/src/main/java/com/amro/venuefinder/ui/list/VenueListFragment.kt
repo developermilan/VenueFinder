@@ -21,6 +21,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class VenueListFragment : Fragment() {
 
+    private val vidKey = "VID"
+
     private lateinit var binding: FragmentVenueListListBinding
     private lateinit var venueListViewModel: VenueListViewModel
     private lateinit var venueAdapter: VenueItemRecyclerViewAdapter
@@ -32,9 +34,6 @@ class VenueListFragment : Fragment() {
         val factory =
             ViewModelProviderFactory(
                 VenueRepository(
-                    NetworkAvailability.isConnectedToInternet(
-                        requireContext()
-                    ),
                     VenueRemoteDataSource.getInstance(),
                     VenueLocalDataSource.getInstance(context?.applicationContext as Application)
                 )
@@ -56,7 +55,7 @@ class VenueListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Venue List")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.venue_list_title))
         (activity as MainActivity).disableBackButton()
 
         binding.apply {
@@ -68,7 +67,7 @@ class VenueListFragment : Fragment() {
         binding.list.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = VenueItemRecyclerViewAdapter(venueListViewModel)
-            this@VenueListFragment.venueAdapter = adapter as VenueItemRecyclerViewAdapter
+            venueAdapter = adapter as VenueItemRecyclerViewAdapter
             setHasFixedSize(true)
         }
 
@@ -77,10 +76,10 @@ class VenueListFragment : Fragment() {
 
     private fun loadFromDatabaseIfInternetIsNotAvailable() {
         if (!NetworkAvailability.isConnectedToInternet(requireContext())) {
-            venueListViewModel.search("any")
+            venueListViewModel.search(getString(R.string.any), false)
             Snackbar.make(
                 binding.list,
-                "Internet is not working. \n So loading previous data",
+                getString(R.string.internet_error),
                 Snackbar.LENGTH_LONG
             ).show()
         }
@@ -99,25 +98,26 @@ class VenueListFragment : Fragment() {
             })
 
             isError.observe(this@VenueListFragment, {
-                val message = it.message ?: "Unknown error"
+                val message = it.message ?: getString(R.string.unknown_error)
                 Snackbar.make(binding.list, message, Snackbar.LENGTH_LONG).show()
+                loadFromDatabaseIfInternetIsNotAvailable()
             })
 
             clickedItemPosition.observe(this@VenueListFragment, {
                 val bundle = Bundle()
-                bundle.putString("VID", venues.value?.get(it)?.id)
+                bundle.putString(vidKey, venues.value?.get(it)?.id)
                 val venueDetailFragment = VenueDetailFragment()
                 venueDetailFragment.arguments = bundle
                 requireActivity().supportFragmentManager.beginTransaction().replace(
                     R.id.container_view, venueDetailFragment
-                ).addToBackStack("details").commit()
+                ).addToBackStack(getString(R.string.fragment_tag)).commit()
             })
         }
     }
 
     override fun onResume() {
         super.onResume()
-        venueListViewModel.initialise()
+        venueListViewModel.initialise(NetworkAvailability.isConnectedToInternet(requireContext()))
     }
 
     override fun onDestroyView() {
@@ -130,11 +130,14 @@ class VenueListFragment : Fragment() {
 
         val item = menu.findItem(R.id.menu_toolbar_search)
         val view = item.actionView as SearchView
-        view.queryHint = "Search venues..."
+        view.queryHint = getString(R.string.search_hint)
 
         view.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                venueListViewModel.search(query)
+                venueListViewModel.search(
+                    query,
+                    NetworkAvailability.isConnectedToInternet(requireContext())
+                )
                 view.apply { if (!isIconified) isIconified = true }
                 item.collapseActionView()
                 return false

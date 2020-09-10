@@ -30,15 +30,16 @@ class VenueDetailFragment : Fragment() {
 
         val factory = ViewModelProviderFactory(
             VenueRepository(
-                NetworkAvailability.isConnectedToInternet(
-                    requireContext()
-                ), VenueRemoteDataSource.getInstance(),
+                VenueRemoteDataSource.getInstance(),
                 VenueLocalDataSource.getInstance(context?.applicationContext as Application)
             )
         )
         viewModel = ViewModelProvider(this, factory).get(VenueDetailViewModel::class.java)
         vid = arguments?.getString(vidKey, "").toString()
-        viewModel.fetchVenueDetails(vid)
+        viewModel.fetchVenueDetails(
+            vid,
+            NetworkAvailability.isConnectedToInternet(requireContext())
+        )
     }
 
     private fun updateUiOnDataChange() {
@@ -56,7 +57,7 @@ class VenueDetailFragment : Fragment() {
             })
 
             isError.observe(viewLifecycleOwner, {
-                val message = it.message ?: "Unknown error"
+                val message = it.message ?: getString(R.string.unknown_error)
                 Snackbar.make(binding.descriptionTv, message, Snackbar.LENGTH_LONG).show()
             })
         }
@@ -74,7 +75,7 @@ class VenueDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Details")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.fragment_tag))
         (activity as MainActivity).enableBackButton()
 
         updateUiOnDataChange()
@@ -82,7 +83,7 @@ class VenueDetailFragment : Fragment() {
         if (!NetworkAvailability.isConnectedToInternet(requireContext())) {
             Snackbar.make(
                 binding.root,
-                "Internet is not working. \nSo loading previous data",
+                getString(R.string.internet_error),
                 Snackbar.LENGTH_LONG
             ).show()
         }

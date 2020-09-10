@@ -14,7 +14,8 @@ class VenueRemoteDataSource : VenueDataSource {
         clientSecret: String,
         version: Int
     ): VenueSearchResult? {
-        return RetrofitClient.buildService(VenueDataSource::class.java).search(near)
+        return RetrofitClient.buildService(VenueDataSource::class.java)
+            .search(near)
     }
 
     override suspend fun details(
@@ -23,7 +24,8 @@ class VenueRemoteDataSource : VenueDataSource {
         clientSecret: String,
         version: Int
     ): VenueDetailResult? {
-        return RetrofitClient.buildService(VenueDataSource::class.java).details(id = id)
+        return RetrofitClient.buildService(VenueDataSource::class.java)
+            .details(id)
     }
 
     companion object {

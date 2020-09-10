@@ -54,16 +54,16 @@ class VenueListViewModelTest {
     fun `search success`() {
         testCoroutineRule.runBlockingTest {
             Mockito.doReturn(VenueSearchResult(VenueSearchResponse(emptyList<Venue>())))
-                .`when`(repository).search("Pune")
+                .`when`(repository).search(search_val, true)
             viewModel = VenueListViewModel(repository)
             viewModel.venues.observeForever(venueList)
             viewModel.isLoading.observeForever(isLoading)
-            viewModel.search("Pune")
+            viewModel.search(search_val, true)
             Mockito.verify(isLoading).onChanged(true)
-            Mockito.verify(repository).search("Pune")
+            Mockito.verify(repository).search(search_val, true)
             Mockito.verify(venueList).onChanged(Mockito.any())
-            Mockito.verify(repository).deleteAll()
-            Mockito.verify(repository).insertVenues(Mockito.anyList())
+            Mockito.verify(repository).deleteAll(true)
+            Mockito.verify(repository).insertVenues(Mockito.anyList(), Mockito.eq(true))
             Mockito.verify(isLoading).onChanged(false)
             viewModel.venues.removeObserver(venueList)
             viewModel.isLoading.removeObserver(isLoading)
@@ -75,11 +75,11 @@ class VenueListViewModelTest {
         testCoroutineRule.runBlockingTest {
             val errorMessage = "Error"
             Mockito.doThrow(RuntimeException(errorMessage))
-                .`when`(repository).search("Pune")
+                .`when`(repository).search(search_val, true)
             viewModel = VenueListViewModel(repository)
             viewModel.isLoading.observeForever(isLoading)
             viewModel.isError.observeForever(isError)
-            viewModel.search("Pune")
+            viewModel.search(search_val, true)
             Mockito.verify(isLoading).onChanged(false)
             Mockito.verify(isError).onChanged(ArgumentMatchers.any())
             viewModel.isLoading.removeObserver(isLoading)
@@ -93,5 +93,9 @@ class VenueListViewModelTest {
         viewModel.clickedItemPosition.observeForever(clickedPosition)
         viewModel.itemClicked(0)
         Mockito.verify(clickedPosition).onChanged(0)
+    }
+
+    companion object {
+        const val search_val = "Pune"
     }
 }

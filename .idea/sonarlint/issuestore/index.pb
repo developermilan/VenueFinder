@@ -19,8 +19,6 @@ d
 4app/src/main/java/com/amro/venuefinder/data/Venue.kt,1/4/1450d68fb17039bf02c00ceb8dc4e9eb7e852d71
 t
 Dapp/src/main/java/com/amro/venuefinder/ui/list/VenueListViewModel.kt,a/5/a5aa5dca97430ce83c592ecef6b38c76d61cde1f
-r
-Bapp/src/main/java/com/amro/venuefinder/network/CustomItercepter.kt,8/1/814dce688c469f0ee323a013652f3ccc3ceca4d3
 p
 @app/src/main/java/com/amro/venuefinder/network/RetrofitClient.kt,a/c/acac953af061f7b56ab20d4a75c91e80083d9005
 o
@@ -45,8 +43,6 @@ p
 @app/src/main/java/com/amro/venuefinder/database/VenueDatabase.kt,3/f/3f183f026429202e5fbc7df64e0e69787fdcc802
 f
 6app/src/main/java/com/amro/venuefinder/data/Contact.kt,d/3/d36be8fc0c21927353fc53a425bfd59930c0b1a5
-d
-4app/src/main/java/com/amro/venuefinder/data/Event.kt,f/3/f3383391de4a460da3ce4ab4c80d5f25703cd8f1
 k
 ;app/src/test/java/com/amro/venuefinder/TestCoroutineRule.kt,c/c/ccd2f60457f0fa1797c8351fdcf3c7851e211cdb
 x

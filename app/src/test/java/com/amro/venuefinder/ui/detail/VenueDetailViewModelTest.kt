@@ -3,11 +3,11 @@ package com.amro.venuefinder.ui.detail
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.amro.venuefinder.TestCoroutineRule
-import com.amro.venuefinder.data.*
+import com.amro.venuefinder.data.Venue
+import com.amro.venuefinder.data.VenueDetailResponse
+import com.amro.venuefinder.data.VenueDetailResult
 import com.amro.venuefinder.repository.VenueRepository
-import com.amro.venuefinder.ui.list.VenueListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -17,7 +17,6 @@ import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import java.lang.RuntimeException
 
 @ExperimentalCoroutinesApi
 @RunWith(JUnit4::class)
@@ -50,11 +49,11 @@ class VenueDetailViewModelTest {
         testCoroutineRule.runBlockingTest {
             val venueObj = Venue("null", null, null, null, null)
             Mockito.doReturn(VenueDetailResult(VenueDetailResponse(venueObj)))
-                .`when`(repository).details("acsdd")
+                .`when`(repository).details(detail_id, true)
             viewModel = VenueDetailViewModel(repository)
             viewModel.venue.observeForever(venue)
-            viewModel.fetchVenueDetails("acsdd")
-            Mockito.verify(repository).details("acsdd")
+            viewModel.fetchVenueDetails(detail_id, true)
+            Mockito.verify(repository).details(detail_id, true)
             Mockito.verify(venue).onChanged(Mockito.any())
             viewModel.venue.removeObserver(venue)
         }
@@ -65,13 +64,17 @@ class VenueDetailViewModelTest {
         testCoroutineRule.runBlockingTest {
             val errorMessage = "Error"
             Mockito.doThrow(RuntimeException(errorMessage))
-                .`when`(repository).details("acsdd")
+                .`when`(repository).details(detail_id, true)
             viewModel = VenueDetailViewModel(repository)
             viewModel.isError.observeForever(isError)
-            viewModel.fetchVenueDetails("acsdd")
+            viewModel.fetchVenueDetails(detail_id, true)
             Mockito.verify(isError).onChanged(ArgumentMatchers.any())
             viewModel.isError.removeObserver(isError)
         }
+    }
+
+    companion object {
+        const val detail_id = "acsdd"
     }
 
 }
